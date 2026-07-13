@@ -1,0 +1,35 @@
+<body>
+  <style>
+    #my-lamp {
+      /* width & other styles */
+      filter: brightness(0.55);
+      transition: filter 0.3s ease;
+    }
+
+    #my-lamp.clicked {
+      filter: brightness(1.2) saturate(1.6)
+        drop-shadow(0px 0px 50px rgba(247, 220, 156, 0.85));
+    }
+  </style>
+
+  <img id="my-lamp" can-move src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNP9TfO4r2FOFBfnb8xcjdXNcxlCyK8igpNAF4ivTj9w&s=10" />
+
+  <!-- Option 1 (simplest, no customization) -->
+    <script type="module">
+        import { playhtml } from "https://unpkg.com/playhtml@2.9.0";
+
+        // Initialize with cursor tracking
+        playhtml.init({
+            cursors: {
+                enabled: true,
+                room: "page",
+                developmentMode: true
+            }
+        });
+
+        // Make playhtml available globally for script.js
+        window.playhtml = playhtml;
+    </script>
+    <!-- The website JavaScript file -->
+    <script src="/script.js" defer></script>
+</body>
