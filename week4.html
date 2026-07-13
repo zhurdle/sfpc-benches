@@ -23,7 +23,42 @@
             cursors: {
                 enabled: true,
                 room: "page",
-                developmentMode: true
+                developmentMode: true,
+                // Custom player identity
+  playerIdentity: {
+    publicKey: "alice",
+    name: "Alice",
+    playerStyle: {
+      colorPalette: ["#3b82f6", "#8b5cf6", "#ec4899"]
+    }
+  },
+
+  // Proximity detection
+  proximityThreshold: 150,  // pixels
+  onProximityEntered: (playerIdentity, positions, angle) => {
+    console.log("User nearby!", playerIdentity.name);
+  },
+  onProximityLeft: (connectionId) => {
+    console.log("User left proximity");
+  },
+
+  // Visibility threshold (hide distant cursors)
+  visibilityThreshold: 1000,  // pixels
+
+  // Enable chat
+  enableChat: true,
+
+  // Coordinate space cursors are stored and broadcast in
+  coordinateMode: "relative",  // "relative" (default) or "absolute"
+
+  // CSS cursor applied to the page while cursors are active
+  cursorStyle: "none",
+
+  // Custom cursor rendering
+  onCustomCursorRender: (connectionId, element) => {
+    // Return custom element or null for default
+    return null;
+  }
             }
         });
 
