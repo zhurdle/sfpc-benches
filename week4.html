@@ -9,11 +9,22 @@
     #my-lamp.clicked {
       filter: brightness(1.2) saturate(1.6) drop-shadow(0px 0px 50px rgba(247, 220, 156, 0.85));
     }
+
+    #section-1 {
+      background: url(https://www.easytogrowbulbs.com/cdn/shop/files/ClimbingFrenchBeanPlant_Gemini-sqWeb.jpg?v=1774907279)
+    }
+
+    #floor {
+      position: fixed;
+      bottom: 0;
+    }
   </style>
 
-  <h2 id="scooby-tag" can-grow can-move>zazoinks</h2>
-  <img id="my-lamp" can-toggle can-move
-    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNP9TfO4r2FOFBfnb8xcjdXNcxlCyK8igpNAF4ivTj9w&s=10" />
+  <section id="section-1">
+    <div id="floor">
+      <img src="https://t3.ftcdn.net/jpg/05/67/12/12/360_F_567121226_fTewr8McPNkKFqVbHaMxJC45Es40YHSf.jpg">
+    </div>
+  </section>
 
   <!-- Option 1 (simplest, no customization) -->
   <script type="module">
