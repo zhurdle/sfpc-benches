@@ -7,64 +7,65 @@
     }
 
     #my-lamp.clicked {
-      filter: brightness(1.2) saturate(1.6)
-        drop-shadow(0px 0px 50px rgba(247, 220, 156, 0.85));
+      filter: brightness(1.2) saturate(1.6) drop-shadow(0px 0px 50px rgba(247, 220, 156, 0.85));
     }
   </style>
 
-  <img id="my-lamp" can-toggle can-move src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNP9TfO4r2FOFBfnb8xcjdXNcxlCyK8igpNAF4ivTj9w&s=10" />
+  <h2 id="scooby-tag" can-grow can-move>zazoinks</h2>
+  <img id="my-lamp" can-toggle can-move
+    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNP9TfO4r2FOFBfnb8xcjdXNcxlCyK8igpNAF4ivTj9w&s=10" />
 
   <!-- Option 1 (simplest, no customization) -->
-    <script type="module">
-        import { playhtml } from "https://unpkg.com/playhtml@2.9.0";
+  <script type="module">
+    import { playhtml } from "https://unpkg.com/playhtml@2.9.0";
 
-        // Initialize with cursor tracking
-        playhtml.init({
-            cursors: {
-                enabled: true,
-                room: "page",
-                developmentMode: true,
-                // Custom player identity
-  playerIdentity: {
-    publicKey: "alice",
-    name: "Alice",
-    playerStyle: {
-      colorPalette: ["#3b82f6", "#8b5cf6", "#ec4899"]
-    }
-  },
+    // Initialize with cursor tracking
+    playhtml.init({
+      cursors: {
+        enabled: true,
+        room: "page",
+        developmentMode: true,
+        // Custom player identity
+        playerIdentity: {
+          publicKey: "alice",
+          name: "Alice",
+          playerStyle: {
+            colorPalette: ["#3b82f6", "#8b5cf6", "#ec4899"]
+          }
+        },
 
-  // Proximity detection
-  proximityThreshold: 1200,  // pixels
-  onProximityEntered: (playerIdentity, positions, angle) => {
-    console.log("User nearby!", playerIdentity.name);
-  },
-  onProximityLeft: (connectionId) => {
-    console.log("User left proximity");
-  },
+        // Proximity detection
+        proximityThreshold: 1200,  // pixels
+        onProximityEntered: (playerIdentity, positions, angle) => {
+          console.log("User nearby!", playerIdentity.name);
+        },
+        onProximityLeft: (connectionId) => {
+          console.log("User left proximity");
+        },
 
-  // Visibility threshold (hide distant cursors)
-  visibilityThreshold: 1000,  // pixels
+        // Visibility threshold (hide distant cursors)
+        visibilityThreshold: 1000,  // pixels
 
-  // Enable chat
-  enableChat: true,
+        // Enable chat
+        enableChat: true,
 
-  // Coordinate space cursors are stored and broadcast in
-  coordinateMode: "relative",  // "relative" (default) or "absolute"
+        // Coordinate space cursors are stored and broadcast in
+        coordinateMode: "relative",  // "relative" (default) or "absolute"
 
-  // CSS cursor applied to the page while cursors are active
-  cursorStyle: "none",
+        // CSS cursor applied to the page while cursors are active
+        cursorStyle: "none",
 
-  // Custom cursor rendering
-  onCustomCursorRender: (connectionId, element) => {
-    // Return custom element or null for default
-    return null;
-  }
-            }
-        });
+        // Custom cursor rendering
+        onCustomCursorRender: (connectionId, element) => {
+          // Return custom element or null for default
+          return null;
+        }
+      }
+    });
 
-        // Make playhtml available globally for script.js
-        window.playhtml = playhtml;
-    </script>
-    <!-- The website JavaScript file -->
-    <script src="/script.js" defer></script>
+    // Make playhtml available globally for script.js
+    window.playhtml = playhtml;
+  </script>
+  <!-- The website JavaScript file -->
+  <script src="/script.js" defer></script>
 </body>
