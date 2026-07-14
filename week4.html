@@ -1,4 +1,7 @@
 <body>
+  <!-- reference -- https://www.smashingmagazine.com/2023/09/revealing-images-css-mask-animations/ -->
+
+  <!-- use this for screenshots -- https://html2canvas.hertzen.com/ -->
   <style>
     #my-lamp {
       /* width & other styles */
@@ -14,17 +17,102 @@
       background: url(https://www.easytogrowbulbs.com/cdn/shop/files/ClimbingFrenchBeanPlant_Gemini-sqWeb.jpg?v=1774907279)
     }
 
-    #floor {
+    .image-1 {
       position: fixed;
       bottom: 0;
+      width: 100%;
+      transform: scale(1.1);
+    }
+
+    /* #floor {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      transform: scale(1.1);
+    } */
+
+    /* #main-section.clicked {
+      filter: brightness(1.2) saturate(1.6) drop-shadow(0px 0px 50px rgba(247, 220, 156, 0.85));
+    } */
+
+    .main-section-clicked {
+      background-color: black;
+    }
+
+    body {
+      transition: ease-in-out all 2s;
+    }
+
+    body * {
+      position: absolute;
+    }
+
+    .d-none {
+      display: none;
+      transition: ease-in-out all 2s;
+    }
+
+    .transition-1 {
+      transition: ease-in-out all 2s;
+    }
+
+    #options {
+      position: fixed;
+      bottom: 15%;
+      left: 50%;
+      display: block;
+    }
+
+    .spacing-1 {
+      margin-left: 40px;
     }
   </style>
 
-  <img src="https://t3.ftcdn.net/jpg/05/67/12/12/360_F_567121226_fTewr8McPNkKFqVbHaMxJC45Es40YHSf.jpg">
+  <section id="main-section" class="transition-1">
+    <div id="day">
+      <img id="day-sky-bg" class="image-1 d-none" style="height:100vh"
+        src="https://upload.wikimedia.org/wikipedia/commons/d/de/Water_reflection_of_Kinkaku-ji_Temple_a_sunny_day%2C_Kyoto%2C_Japan.jpg">
+    </div>
+    <div id="night">
+      <img id="night-sky-bg" class="image-1 d-none" style="height:100vh"
+        src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Stars_01_%28MK%29.jpg">
+    </div>
+    <img id="floor" class="image-1" src="grass.png">
+    <div id="options">
+      <button id="button-1">Day</button>
+      <button id="button-2" class="spacing-1">Night</button>
+    </div>
+  </section>
   <!-- <section id="section-1">
     <div id="floor">
     </div>
   </section> -->
+
+  <script>
+    const bodyElement = document.querySelector('body')
+    const nightSkyBackground = document.querySelector('#day-sky-bg')
+    const daySkyBackground = document.querySelector('#night-sky-bg')
+    const option1 = document.querySelector('#option-1')
+    const option2 = document.querySelector('#option-2')
+    document.addEventListener('click', function (e) {
+      target = e.target
+      console.log('target ' + target.outerHTML)
+      console.log(`target.getAttribute('id=button-1') ` + target.getAttribute('[id=button-1]'))
+      // bodyElement.classList.toggle('main-section-clicked')
+      if (target.getAttribute('id') === 'button-1') {
+        if (!nightSkyBackground.classList.contains('d-none')) {
+          nightSkyBackground.classList.toggle('d-none')
+        }
+        daySkyBackground.classList.toggle('d-none')
+      }
+      if (target.getAttribute('id') === 'button-2') {
+        if (!daySkyBackground.classList.contains('d-none')) {
+          daySkyBackground.classList.toggle('d-none')
+        }
+        nightSkyBackground.classList.toggle('d-none')
+      }
+    })
+  </script>
 
   <!-- Option 1 (simplest, no customization) -->
   <script type="module">
