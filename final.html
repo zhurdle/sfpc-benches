@@ -1,0 +1,233 @@
+<style>
+    body {
+        height: 4000px;
+        width: 4000px;
+    }
+
+    #grass {
+        background: url('grass2.png');
+        background-size: cover;
+        width: 100%;
+        transform: scale(1.1);
+        height: 4000px;
+        margin-top: -2750px;
+        position: relative;
+        z-index: 5;
+    }
+
+    #options {
+        position: fixed;
+        z-index: 10;
+        top: 5%;
+        left: 50%;
+    }
+
+    #main-background {
+        /* position: fixed; */
+        /* background: url('kyoto.jpg'); */
+        width: 100%;
+        height: 100%;
+        transform: scale(1.1);
+        background-size: cover;
+    }
+
+    #the-cave {
+        height: 100%;
+        width: 100%;
+        z-index: 5;
+        /* position: absolute; */
+        /* background: url('https://picsum.photos/2200/1000'); */
+        background-size: cover;
+    }
+
+    #screenshot-box {
+        border: solid black 2px;
+        width: 250px;
+        height: 250px;
+        position: fixed;
+        z-index: 5;
+        resize: both;
+    }
+
+    .user-generated-image {
+        width: 250px;
+        height: 250px;
+    }
+
+    #user-generated-content {
+        position: fixed;
+        bottom: 0;
+        z-index: 10;
+        overflow-x: scroll;
+        display: flex;
+    }
+</style>
+
+<body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <section id="user-generated-content">
+    </section>
+    <section>
+        <div>
+            <div id="main-background"></div>
+            <div id="screenshot-box" can-move></div>
+        </div>
+        <div id="options" can-move>
+            <button id="new-background">New Background</button>
+            <button id="capture">Capture</button>
+            <button id="focus">Focus</button>
+        </div>
+        <!-- <div id="grass"></div> -->
+    </section>
+
+    <!-- html2canvas -->
+
+    <script>
+        document.getElementById('capture').addEventListener('click', async () => {
+            const screenshotBox = document.getElementById('screenshot-box');
+
+            // 1. Get the exact screen coordinates and dimensions of the selection box
+            const rect = screenshotBox.getBoundingClientRect();
+
+            const currentScrollX = window.scrollX;
+            const currentScrollY = window.scrollY;
+
+            // 2. Let html2canvas handle the cropping and element ignoring natively
+            const canvas = await html2canvas(document.body, {
+                x: rect.left + currentScrollX,
+                y: rect.top + currentScrollY,
+                width: rect.width,
+                height: rect.height,
+                scrollX: currentScrollX,
+                scrollY: currentScrollY,
+                useCORS: true,
+                // This natively hides the box border from the capture without breaking the layout
+                ignoreElements: (node) => node.id === 'screenshot-box'
+            });
+
+            // 3. Generate the image and append it to the page
+            const imageURL = canvas.toDataURL('image/png');
+
+            // const canvas = await html2canvas(screenshotBox);
+            const ugcBox = document.querySelector('#user-generated-content')
+
+            // const imageURL = cropCanvas.toDataURL('image/png');
+            // const imageURL = canvas.toDataURL('image/png');
+            const imageLink = document.createElement('a')
+            imageLink.setAttribute('href', imageURL)
+
+            console.log('imageLink: ' + imageLink)
+
+            const newImage = document.createElement('img')
+            newImage.src = imageURL
+            newImage.classList.add('user-generated-image')
+            newImage.setAttribute('height', '250px')
+            newImage.setAttribute('width', '250px')
+            newImage.setAttribute('can-move', 'can-move')
+            newImage.style.background = `src: ${imageURL}`
+            imageContainer = document.createElement('div')
+            imageContainer.insertAdjacentElement('afterbegin', newImage)
+            imageContainer.insertAdjacentElement('beforeend', imageLink)
+            ugcBox.insertAdjacentElement('beforeend', imageContainer)
+            console.log('ugc: ' + imageURL)
+
+        });
+    </script>
+
+    <!-- background image handling -->
+    <script>
+        const newBackgroundButton = document.querySelector('#new-background')
+        const mainBackground = document.querySelector('#main-background')
+        const newBackgroundBaseUrl = 'https://picsum.photos/2200/1000'
+        const screenShotBox = document.querySelector('#screenshot-box')
+
+        const backgroundUrls = ['kyoto.jpg', 'sky.jpg', 'the-cave.png']
+
+        const backgroundUrlsCount = backgroundUrls.length
+
+        document.addEventListener('DOMContentLoaded', function (e) {
+            document.addEventListener('click', function (e) {
+                const target = e.target
+                const targetId = target.getAttribute('id')
+                const randomBackgroundImageIndex = Math.floor(Math.random() * backgroundUrls.length)
+
+                // console.log('backgroundUrls' + backgroundUrls)
+                // console.log('backgroundUrlsCount' + backgroundUrlsCount)
+                // console.log('random image: ' + backgroundUrls[randomBackgroundImage])
+
+                console.log('targetId ' + targetId)
+
+                if (targetId === 'new-background') {
+                    mainBackground.style.background = ''
+                    // mainBackground.style.background = `url(${newBackgroundBaseUrl}?t=${Date.now()})`
+                    mainBackground.style.background = `url(${backgroundUrls[randomBackgroundImageIndex]})`
+                }
+                if (targetId === 'focus') {
+                    e.preventDefault()
+                    screenShotBox.scrollIntoView()
+                }
+                if (targetId === 'right') {
+                    console.log('cave right' + target.outerHTML)
+                }
+            })
+        })
+
+    </script>
+
+    <!-- Option 1 (simplest, no customization) -->
+    <script type="module">
+        import { playhtml } from "https://unpkg.com/playhtml@2.9.0";
+
+        // Initialize with cursor tracking
+        playhtml.init({
+            cursors: {
+                enabled: true,
+                room: "page",
+                developmentMode: true,
+                // Custom player identity
+                playerIdentity: {
+                    publicKey: "alice",
+                    name: "Alice",
+                    playerStyle: {
+                        colorPalette: ["#3b82f6", "#8b5cf6", "#ec4899"]
+                    }
+                },
+
+                // Proximity detection
+                proximityThreshold: 1200,  // pixels
+                onProximityEntered: (playerIdentity, positions, angle) => {
+                    console.log("User nearby!", playerIdentity.name);
+                },
+                onProximityLeft: (connectionId) => {
+                    console.log("User left proximity");
+                },
+
+                // Visibility threshold (hide distant cursors)
+                visibilityThreshold: 1000,  // pixels
+
+                // Enable chat
+                enableChat: true,
+
+                // Coordinate space cursors are stored and broadcast in
+                coordinateMode: "relative",  // "relative" (default) or "absolute"
+
+                // CSS cursor applied to the page while cursors are active
+                cursorStyle: "none",
+
+                // Custom cursor rendering
+                onCustomCursorRender: (connectionId, element) => {
+                    // Return custom element or null for default
+                    return null;
+                }
+            }
+        });
+
+
+        // Make playhtml available globally for script.js
+        window.playhtml = playhtml;
+    </script>
+    <!-- The website JavaScript file -->
+    <script src="/script.js" defer></script>
+</body>

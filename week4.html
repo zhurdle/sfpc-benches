@@ -1,7 +1,5 @@
 <body>
-  <!-- reference -- https://www.smashingmagazine.com/2023/09/revealing-images-css-mask-animations/ -->
 
-  <!-- use this for screenshots -- https://html2canvas.hertzen.com/ -->
   <style>
     #my-lamp {
       /* width & other styles */
@@ -18,18 +16,38 @@
     }
 
     .image-1 {
+      height: 250vh;
+      width: 100%;
+      background-size: contain;
+      transform: scale(1.1);
+      /* position: fixed;
+      bottom: 0;
+      width: 100%;
+      transform: scale(1.1); */
+    }
+
+    #floor {
       position: fixed;
       bottom: 0;
       width: 100%;
       transform: scale(1.1);
     }
 
-    /* #floor {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
+    #grass {
+      background: url('grass2.png');
+      background-size: cover;
+      /* background-repeat: repeat-y; */
+      height: 427vh;
+      top: 236%;
+      width: 100vw;
+      position: absolute;
       transform: scale(1.1);
-    } */
+      margin-top: -1300;
+    }
+
+    #main-section {
+      height: 300vh;
+    }
 
     /* #main-section.clicked {
       filter: brightness(1.2) saturate(1.6) drop-shadow(0px 0px 50px rgba(247, 220, 156, 0.85));
@@ -39,11 +57,20 @@
       background-color: black;
     }
 
-    body {
-      transition: ease-in-out all 2s;
+    #options {
+      position: fixed;
+      bottom: 15%;
+      /* bottom: 15%;
+      left: 50%; */
+      display: flex;
     }
 
-    body * {
+    body {
+      transition: ease-in-out all 2s;
+      overflow-x: hidden;
+    }
+
+    .absolute-position {
       position: absolute;
     }
 
@@ -56,31 +83,47 @@
       transition: ease-in-out all 2s;
     }
 
-    #options {
-      position: fixed;
-      bottom: 15%;
-      left: 50%;
-      display: block;
+    .spacing-1 {
+      /* margin-left: 65px; */
     }
 
-    .spacing-1 {
-      margin-left: 40px;
+    #picture-frame {
+      border: solid black 2px;
+      width: 200px;
+      height: 200px;
+    }
+
+    .floor-adjust {
+      margin-top: -60;
     }
   </style>
 
+  <!-- reference -- https://www.smashingmagazine.com/2023/09/revealing-images-css-mask-animations/ -->
+
+  <!-- use this for screenshots -- https://html2canvas.hertzen.com/ -->
+
   <section id="main-section" class="transition-1">
+    <!-- <h1>text goes here</h1> -->
+    <div id="auto-background"></div>
     <div id="day">
-      <img id="day-sky-bg" class="image-1 d-none" style="height:100vh"
-        src="https://upload.wikimedia.org/wikipedia/commons/d/de/Water_reflection_of_Kinkaku-ji_Temple_a_sunny_day%2C_Kyoto%2C_Japan.jpg">
+      <img id="day-sky-bg" class="image-1 d-none" src="kyoto.jpg">
     </div>
     <div id="night">
-      <img id="night-sky-bg" class="image-1 d-none" style="height:100vh"
-        src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Stars_01_%28MK%29.jpg">
+      <img id="night-sky-bg" class="image-1 d-none" src="sky.jpg">
     </div>
-    <img id="floor" class="image-1" src="grass.png">
-    <div id="options">
-      <button id="button-1">Day</button>
-      <button id="button-2" class="spacing-1">Night</button>
+    <!-- <img id="floor" class="image-1" src="grass.png"> -->
+    <div id="grass">
+      <!-- <img class="image-1 floor-adjust" src="grass.png">
+      <img class="image-1 floor-adjust" src="grass.png">
+      <img class="image-1 floor-adjust" src="grass.png">
+      <img class="image-1 floor-adjust" src="grass.png"> -->
+    </div>
+    <div id="picture-frame" can-move></div>
+    <div id="options" can-move>
+      <button id="new-background">New Background</button>
+      <button id="button-1">Outside</button>
+      <button id="button-2" class="spacing-1">Inside</button>
+      <button id="option-3" onclick(takeScreenshot()) data-value="inside-option">Screenshot</button>
     </div>
   </section>
   <!-- <section id="section-1">
@@ -89,29 +132,107 @@
   </section> -->
 
   <script>
+    var randomInternetArchive = require('random-internet-archive');
+    var request = require('request');
+
+    randomInternetArchive(
+      {
+        request,
+        collection: 'mathematicsimage',
+        mediatype: 'image',
+        fileExtensions: ['jpg', 'jpeg'],
+        minimumSize: 20000,
+        maximumSize: 2000000
+      },
+      print()
+    );
+
+    function print(error, result) {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log(result);
+      }
+    }
+  </script>
+
+  <script>
     const bodyElement = document.querySelector('body')
     const nightSkyBackground = document.querySelector('#day-sky-bg')
     const daySkyBackground = document.querySelector('#night-sky-bg')
+    const options = document.querySelectorAll('#options>button')
     const option1 = document.querySelector('#option-1')
     const option2 = document.querySelector('#option-2')
+    const option3 = document.querySelector('#option-3')
+    const newBackgroundButton = document.querySelector('#new-background')
+    const autoBackground = document.querySelector('#auto-background')
+
+    document.addEventListener('DOMContentLoaded', function (e) {
+      const allElements = document.querySelectorAll('#main-section>*')
+
+      // allElements.forEach(element => {
+      //   element.classList.add('absolute-position')
+      // })
+
+    })
+
     document.addEventListener('click', function (e) {
       target = e.target
-      console.log('target ' + target.outerHTML)
-      console.log(`target.getAttribute('id=button-1') ` + target.getAttribute('[id=button-1]'))
-      // bodyElement.classList.toggle('main-section-clicked')
-      if (target.getAttribute('id') === 'button-1') {
-        if (!nightSkyBackground.classList.contains('d-none')) {
-          nightSkyBackground.classList.toggle('d-none')
-        }
-        daySkyBackground.classList.toggle('d-none')
+      // console.log('target ' + target.outerHTML)
+      // console.log(`target.getAttribute('id=button-1') ` + target.getAttribute('[id=button-1]'))
+
+      options.forEach(option => {
+        option.setAttribute("can-move", "")
+      })
+
+      function randomURL() {
+        const urlBase = ''
+
+        return URL
       }
-      if (target.getAttribute('id') === 'button-2') {
+
+      if (target.getAttribute('id') === 'new-background') {
+        autoBackground.style.background = ''
+      }
+
+      if (target.getAttribute('id') === 'button-1') {
         if (!daySkyBackground.classList.contains('d-none')) {
           daySkyBackground.classList.toggle('d-none')
         }
         nightSkyBackground.classList.toggle('d-none')
       }
+      if (target.getAttribute('id') === 'button-2') {
+        if (!nightSkyBackground.classList.contains('d-none')) {
+          nightSkyBackground.classList.toggle('d-none')
+        }
+        daySkyBackground.classList.toggle('d-none')
+      }
     })
+  </script>
+
+  <script>
+
+    const capture = async () => {
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+      const video = document.createElement("video");
+
+      try {
+        const captureStream = await navigator.mediaDevices.getDisplayMedia();
+        video.srcObject = captureStream;
+        context.drawImage(video, 0, 0, window.width, window.height);
+        const frame = canvas.toDataURL("image/png");
+        captureStream.getTracks().forEach(track => track.stop());
+        window.location.href = frame;
+      } catch (err) {
+        console.error("Error: " + err);
+      }
+    };
+
+    option3.addEventListener('click', function (e) {
+      capture();
+    })
+
   </script>
 
   <!-- Option 1 (simplest, no customization) -->
